@@ -23,7 +23,7 @@
         .number {
             font-size: 100px;
             font-weight: bold;
-            color: #1a73e8;
+            color: #1a73e8; /* Google蓝色 */
             margin: 20px 0;
         }
         .label {
@@ -35,36 +35,6 @@
             color: #9aa0a6;
             margin-top: 20px;
         }
-        /* 新增样式：倒计时区域和按钮 */
-        .timer-section {
-            margin: 30px 0 20px;
-            padding: 20px;
-            border-top: 1px solid #eee;
-        }
-        #timerDisplay {
-            font-size: 48px;
-            font-weight: bold;
-            color: #34a853; /* Google绿色 */
-            margin: 15px 0;
-            letter-spacing: 2px;
-        }
-        #startTimerBtn {
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #startTimerBtn:hover {
-            background-color: #0d62d9;
-        }
-        #startTimerBtn:disabled {
-            background-color: #9aa0a6;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
@@ -72,17 +42,10 @@
         <div class="label">Số lượng đăng ký hiện tại</div>
         <div class="number" id="count">--</div>
         <div class="update-time" id="time">Loading...</div>
-        
-        <!-- 新增的倒计时区域 -->
-        <div class="timer-section">
-            <div>Countdown Timer</div>
-            <div id="timerDisplay">20:00</div>
-            <button id="startTimerBtn">Click to Start</button>
-        </div>
     </div>
 
     <script>
-        // 原有的数据获取功能保持不变
+        // 替换为你第一步获得的真实 Web App URL
         const webAppUrl = 'https://script.google.com/macros/s/AKfycbxMGlWC-zarnL4ZZNn4aaMRwEnKCt7VfGCeGNc_uS7AXaykVd4iSL0EyMD16FbL9GXDwg/exec';
 
         async function updateCount() {
@@ -94,64 +57,14 @@
             } catch (error) {
                 console.error('获取数据失败:', error);
                 document.getElementById('count').textContent = 'Err';
-                document.getElementById('time').textContent = 'Cập nhật thất bại';
+                document.getElementById('time').textContent = '更新失败';
             }
         }
 
+        // 页面加载后立即更新一次
         updateCount();
+        // 然后每10秒自动更新一次（可根据需要调整间隔）
         setInterval(updateCount, 10000);
-        
-        // ============ 新增的倒计时功能 ============
-        const timerDisplay = document.getElementById('timerDisplay');
-        const startBtn = document.getElementById('startTimerBtn');
-        
-        let countdownTime = 20 * 60; // 20分钟，以秒为单位
-        let timerInterval = null;
-        
-        // 格式化时间为 MM:SS
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
-        
-        // 更新倒计时显示
-        function updateTimerDisplay() {
-            timerDisplay.textContent = formatTime(countdownTime);
-            if (countdownTime <= 60) {
-                timerDisplay.style.color = '#ea4335'; // 最后一分钟变为红色
-            }
-        }
-        
-        // 开始倒计时
-        function startCountdown() {
-            startBtn.textContent = "Counting Down...";
-            startBtn.disabled = true;
-            
-            updateTimerDisplay(); // 立即更新一次显示
-            
-            timerInterval = setInterval(() => {
-                countdownTime--;
-                updateTimerDisplay();
-                
-                if (countdownTime <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Time's up! 20 minutes have elapsed.");
-                    startBtn.textContent = "Click to Start";
-                    startBtn.disabled = false;
-                    countdownTime = 20 * 60; // 重置时间
-                    timerDisplay.style.color = '#34a853'; // 恢复绿色
-                    updateTimerDisplay();
-                }
-            }, 1000);
-        }
-        
-        // 绑定按钮点击事件
-        startBtn.addEventListener('click', startCountdown);
-        
-        // 初始化显示
-        updateTimerDisplay();
     </script>
 </body>
-
 </html>
