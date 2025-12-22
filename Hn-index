@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>表单提交实时统计</title>
+    <style>
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: sans-serif; 
+            background-color: #f0f0f0;
+        }
+        .counter-container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .number {
+            font-size: 100px;
+            font-weight: bold;
+            color: #1a73e8; /* Google蓝色 */
+            margin: 20px 0;
+        }
+        .label {
+            font-size: 24px;
+            color: #5f6368;
+        }
+        .update-time {
+            font-size: 14px;
+            color: #9aa0a6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter-container">
+        <div class="label">Số lượng đăng ký hiện tại</div>
+        <div class="number" id="count">--</div>
+        <div class="update-time" id="time">Loading...</div>
+    </div>
+
+    <script>
+        // 替换为你第一步获得的真实 Web App URL
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzPmfFRLaX5_nKb4-XbyjGwj37KnEiFiO5n5CsUTTbOBDAcbNVbUNDeSgdu4O3YBAZ3vA/exec';
+
+        async function updateCount() {
+            try {
+                const response = await fetch(webAppUrl);
+                const newCount = await response.text();
+                document.getElementById('count').textContent = newCount;
+                document.getElementById('time').textContent = `Thời gian thu thập dữ liệu：${new Date().toLocaleTimeString()}`;
+            } catch (error) {
+                console.error('获取数据失败:', error);
+                document.getElementById('count').textContent = 'Err';
+                document.getElementById('time').textContent = '更新失败';
+            }
+        }
+
+        // 页面加载后立即更新一次
+        updateCount();
+        // 然后每10秒自动更新一次（可根据需要调整间隔）
+        setInterval(updateCount, 10000);
+    </script>
+</body>
+</html>
